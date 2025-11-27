@@ -11,10 +11,16 @@ app = FastAPI(
     version="1.0.0",
 )
 
-# Apply CORS Middleware using settings
+# --- CORS CONFIGURATION ---
+# Vital for Frontend Integration: Explicitly allow localhost:3000 (React)
+# We combine the settings list with development origins to ensure the dashboard works immediately.
+origins = ["http://localhost:3000", "http://localhost:8000"]
+if hasattr(settings, "CORS_ORIGINS") and settings.CORS_ORIGINS:
+    origins.extend(settings.CORS_ORIGINS)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.CORS_ORIGINS, 
+    allow_origins=origins, 
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
